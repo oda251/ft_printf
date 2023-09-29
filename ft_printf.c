@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:46:15 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/29 10:30:56 by yoda             ###   ########.fr       */
+/*   Updated: 2023/09/29 20:06:42 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,26 @@ static const char	*put_until_percent(const char *format, char **dest)
 
 static const char	*put_converted(const char *format, char **dest, va_list *ap)
 {
-	if (*format == CHAR)
-		format += solve_char(dest, va_arg(*ap, char));
-	else if (*format == STR)
+	if (*format == 'c')
+		format += solve_char(dest, va_arg(*ap, int));
+	else if (*format == 's')
 		format += solve_str(dest, va_arg(*ap, char*));
-	else if (*format == PTR)
+	else if (*format == 'p')
 		format += solve_ptr(dest, va_arg(*ap, unsigned long));
-	else if (*format == DEC || *format == INT)
+	else if (*format == 'd' || *format == 'i')
 		format += solve_int(dest, va_arg(*ap, int));
-	else if (*format == U_DEC)
+	else if (*format == 'u')
 		format += solve_uint(dest, va_arg(*ap, unsigned int));
-	else if (*format == HEX_LOWER)
-		format += solve_hex_low(dest, va_arg(*ap, int));
-	else if (*format == HEX_UPPER)
-		format += solve_hex_up(dest, va_arg(*ap, int));
-	else if (*format == PERCENT)
-		format += solve_percent(dest);
+	else if (*format == 'x')
+		format += solve_hex_lowup(dest, va_arg(*ap, int), 0);
+	else if (*format == 'X')
+		format += solve_hex_lowup(dest, va_arg(*ap, int), 1);
+	else if (*format == '%')
+		format += solve_char(dest, '%');
 	else
-	{
-		*dest = strjoin_realloc(*dest, "%", 1);
-		if (!*dest)
-			return (NULL);
-	}
+		solve_char(dest, '%');
+	if (!*dest)
+		return (NULL);
 	return (format);
 }
 
@@ -77,10 +75,4 @@ int	ft_printf(const char *format, ...)
 	len = ft_strlen(dest);
 	write(1, dest, len);
 	return (len);
-}
-
-int main()
-{
-	ft_printf("Hello, world!\n");
-	return 0;
 }
