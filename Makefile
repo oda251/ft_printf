@@ -1,6 +1,6 @@
 NAME = libftprintf.a
 CC = cc
-CFRAGS = -Wall -Wextra -Werror
+CFRAGS = -Wall -Wextra -Werror -g
 INCLUDES = -I ./ -I ./libft/
 LIBFT = libft.a
 LIBFT_DIR = ./libft/
@@ -14,14 +14,18 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	ar rcs $(NAME) $(OBJS) $(LIBFT_A)
+	cp -f $(LIBFT_A) $(NAME)
+	ar rcs $(NAME) $(OBJS)
 	ranlib $(NAME)
 
 $(LIBFT):
 	make -C ./libft
 
 $(OBJS): %.o: %.c
-	$(CC) $(CFRAGS) $(INCLUDES) -c $< -o $@ -L ./libft -lft
+	$(CC) $(CFRAGS) $(INCLUDES) -c $< -o $@
+
+test:
+	$(CC) -Wall -Wextra test.c -L./ -lftprintf
 
 clean:
 	make clean -C ./libft

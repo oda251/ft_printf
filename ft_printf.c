@@ -3,76 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:46:15 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/29 20:06:42 by yoda             ###   ########.fr       */
+/*   Updated: 2023/09/30 17:12:35 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static const char	*put_until_percent(const char *format, char **dest)
+static const char	*put_until_percent(const char *format, size_t *len)
 {
 	size_t	i;
 
 	i = 0;
 	while (format[i] && format[i] != '%')
 		i++;
-	*dest = strjoin_realloc(*dest, format, i);
-	if (!*dest)
-		return (NULL);
+	write(1, format, i);
+	*len += i;
 	return (format + i);
 }
 
-static const char	*put_converted(const char *format, char **dest, va_list *ap)
+static const char	*put_converted(const char *format, va_list *ap, size_t *len)
 {
 	if (*format == 'c')
-		format += solve_char(dest, va_arg(*ap, int));
+		format += solve_char(va_arg(*ap, int), len);
 	else if (*format == 's')
-		format += solve_str(dest, va_arg(*ap, char*));
+		format += solve_str(va_arg(*ap, char*), len);
 	else if (*format == 'p')
-		format += solve_ptr(dest, va_arg(*ap, unsigned long));
+		format += solve_ptr(va_arg(*ap, unsigned long), len);
 	else if (*format == 'd' || *format == 'i')
-		format += solve_int(dest, va_arg(*ap, int));
+		format += solve_int(va_arg(*ap, int), len);
 	else if (*format == 'u')
-		format += solve_uint(dest, va_arg(*ap, unsigned int));
+		format += solve_uint(va_arg(*ap, unsigned int), len);
 	else if (*format == 'x')
-		format += solve_hex_lowup(dest, va_arg(*ap, int), 0);
+		format += solve_hex_lowup(va_arg(*ap, int), 0, len);
 	else if (*format == 'X')
-		format += solve_hex_lowup(dest, va_arg(*ap, int), 1);
+		format += solve_hex_lowup(va_arg(*ap, int), 1, len);
 	else if (*format == '%')
-		format += solve_char(dest, '%');
+		format += solve_char('%', len);
 	else
-		solve_char(dest, '%');
-	if (!*dest)
-		return (NULL);
+		solve_char('%', len);
 	return (format);
 }
 
 int	ft_printf(const char *format, ...)
 {
 	va_list	ap;
-	char		*dest;
 	size_t	len;
 
-	if (!initialize_printf(&dest, format))
+	if (!format)
 		return (0);
 	va_start(ap, format);
 	while (*format)
 	{
-		format = put_until_percent(format, &dest);
-		if (!format)
-			return (0) ;
+		format = put_until_percent(format, &len);
 		if (*format == '%')
 		{
-			format = put_converted(format + 1, &dest, &ap);
+			format = put_converted(format + 1, &ap, &len);
 			if (!format)
 				return (0);
 		}
 	}
 	va_end(ap);
-	len = ft_strlen(dest);
-	write(1, dest, len);
 	return (len);
 }
