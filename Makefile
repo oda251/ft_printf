@@ -6,9 +6,11 @@ LIBFT = libft.a
 LIBFT_DIR = ./libft/
 LIBFT_A = $(addprefix $(LIBFT_DIR), $(LIBFT))
 SRCS = ft_printf.c \
-	ft_printf_utils.c \
+	interpret_format.c \
 	solve_format_chars.c \
-	solve_format_num.c
+	solve_format_num.c \
+	solve_format_nums_sub.c \
+	solve_format_chars_sub.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
@@ -24,8 +26,11 @@ $(LIBFT):
 $(OBJS): %.o: %.c
 	$(CC) $(CFRAGS) $(INCLUDES) -c $< -o $@
 
-test:
-	$(CC) -Wall -Wextra test.c -L./ -lftprintf
+bonus: all
+
+test: $(NAME)
+	@$(CC) -Wall -Wextra $(SRCS) $(INCLUDES) -L$(LIBFT_DIR) -lft -g -fsanitize=address -o a.out
+	./a.out
 
 clean:
 	make clean -C ./libft
@@ -37,4 +42,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test bonus

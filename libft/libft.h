@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 20:55:50 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/29 19:01:11 by yoda             ###   ########.fr       */
+/*   Updated: 2023/10/01 07:47:18 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,8 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 char	*ft_ultoa(unsigned long n);
 char	*ft_ultoa_hex(unsigned long n, int up_flag);
+int		ft_atoi_only_num(const char *str);
+void	ft_putstr(char *str);
+char	*ft_itoa_sign_sep(int n, char **sign);
 
 #endif

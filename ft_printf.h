@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:46:31 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/30 17:17:59 by yoda             ###   ########.fr       */
+/*   Updated: 2023/10/01 04:55:51 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,17 @@
 # define UPPER 1
 # define LOWER 0
 
-int	solve_char(char c, size_t *len);
-int	solve_str(char *str, size_t *len);
-int	solve_int(int n, size_t *len);
-int	solve_uint(unsigned int n, size_t *len);
-int	solve_ptr(unsigned long ptr, size_t *len);
-int	solve_hex_lowup(unsigned int n, int up_flag, size_t *len);
+typedef struct s_pflags
+{
+	unsigned int	zero;
+	unsigned int	minus;
+	ssize_t			width;
+	unsigned int	dot;
+	ssize_t			precision;
+	unsigned int	plus;
+	unsigned int	space;
+	unsigned int	sharp;
+}	t_pflags;
 int	ft_printf(const char *format, ...);
 
 #endif

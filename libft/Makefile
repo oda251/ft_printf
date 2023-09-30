@@ -43,7 +43,10 @@ SRCS = ft_atoi.c \
 	ft_lstnew_bonus.c \
 	ft_lstsize_bonus.c \
 	ft_ultoa.c \
-	ft_ultoa_hex.c
+	ft_ultoa_hex.c \
+	ft_atoi_only_num.c \
+	ft_putstr.c \
+	ft_itoa_sign_sep.c
 OBJS = $(SRCS:.c=.o)
 CC = cc
 CFRAGS = -Wall -Wextra -Werror

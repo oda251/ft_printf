@@ -3,65 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   solve_format_num.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 02:56:23 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/30 17:21:32 by yoda             ###   ########.fr       */
+/*   Updated: 2023/10/01 07:46:51 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	solve_ptr(unsigned long ptr, size_t *len)
-{
-	char	*str;
-	size_t	str_len;
+void	solve_with_flags(char *str, char *prefix, t_pflags *flags, size_t *len);
 
-	str = ft_ultoa_hex(ptr, 0);
-	if (!str)
+int	solve_ptr(unsigned long ptr, size_t *len, t_pflags *flags)
+{
+	char		*str;
+	const char	*prefix = "0x";
+
+	if (!ptr && flags->dot && !flags->precision)
+	{
 		return (1);
-	write(1, "0x", 2);
-	str_len = ft_strlen(str);
-	write(1, str, ft_strlen(str));
-	free(str);
-	(*len) += str_len + 2;
-	return (1);
-}
-
-int	solve_int(int n, size_t *len)
-{
-	char	*str;
-	size_t	str_len;
-
-	str = ft_itoa(n);
+	}
+	else if (!ptr)
+	{
+		write(1, "0", 1);
+		(*len)++;
+		return (1);
+	}
+	else
+		str = ft_ultoa_hex(ptr, LOWER);
 	if (!str)
 		return (-1);
-	str_len = ft_strlen(str);
-	write(1, str, ft_strlen(str));
-	free(str);
-	(*len) += str_len;
+	solve_with_flags(str, (char *)prefix, flags, len);
 	return (1);
 }
 
-int	solve_uint(unsigned int n, size_t *len)
+int	solve_int(int n, size_t *len, t_pflags *flags)
 {
 	char	*str;
-	size_t	str_len;
+	char	*prefix;
+
+	prefix = "\0";
+	str = ft_itoa_sign_sep(n, &prefix);
+	if (!str)
+		return (-1);
+	if (flags->space && *prefix != '-')
+		prefix = " ";
+	else if (flags->plus && *prefix != '-')
+		prefix = "+";
+	solve_with_flags(str, prefix, flags, len);
+	return (1);
+}
+
+int	solve_uint(unsigned int n, size_t *len, t_pflags *flags)
+{
+	char	*str;
 
 	str = ft_ultoa(n);
 	if (!str)
 		return (-1);
-	str_len = ft_strlen(str);
-	write(1, str, ft_strlen(str));
-	free(str);
-	(*len) += str_len;
+	solve_with_flags(str, "", flags, len);
 	return (1);
 }
 
-int	solve_hex_lowup(unsigned int n, int up_flag, size_t *len)
+int	solve_hex_lowup(unsigned int n, int up_flag, size_t *len, t_pflags *flags)
 {
 	char	*str;
-	size_t	str_len;
+	char	*prefix;
 
 	if (up_flag)
 		str = ft_ultoa_hex(n, UPPER);
@@ -69,9 +76,14 @@ int	solve_hex_lowup(unsigned int n, int up_flag, size_t *len)
 		str = ft_ultoa_hex(n, LOWER);
 	if (!str)
 		return (-1);
-	str_len = ft_strlen(str);
-	write(1, str, ft_strlen(str));
-	free(str);
-	(*len) += str_len;
+	prefix = "";
+	if (flags->sharp && n)
+	{
+		if (up_flag)
+			prefix = "0X";
+		else
+			prefix = "0x";
+	}
+	solve_with_flags(str, prefix, flags, len);
 	return (1);
 }
