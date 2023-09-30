@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:46:15 by yoda              #+#    #+#             */
-/*   Updated: 2023/09/30 17:12:35 by yoda             ###   ########.fr       */
+/*   Updated: 2023/09/30 18:05:33 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	ft_printf(const char *format, ...)
 
 	if (!format)
 		return (0);
+	len = 0;
 	va_start(ap, format);
 	while (*format)
 	{

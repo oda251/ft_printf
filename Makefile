@@ -1,6 +1,6 @@
 NAME = libftprintf.a
 CC = cc
-CFRAGS = -Wall -Wextra -Werror -g
+CFRAGS = -Wall -Wextra -Werror
 INCLUDES = -I ./ -I ./libft/
 LIBFT = libft.a
 LIBFT_DIR = ./libft/
