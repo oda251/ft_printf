@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 03:46:15 by yoda              #+#    #+#             */
-/*   Updated: 2023/10/01 07:57:36 by yoda             ###   ########.fr       */
+/*   Updated: 2023/10/01 18:37:51 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,11 @@ int	ft_printf(const char *format, ...)
 
 // int main()
 // {
-// 	char *str = "[%.5d]";
+// 	char *str = "[%+.d]";
 
-// 	printf("%d\n", ft_printf(str, -1));
+// 	printf("%d\n", ft_printf(str, 0));
 // 	printf("\n");
-// 	printf("%d\n", printf(str, -1));
+// 	printf("%d\n", printf(str, 0));
 // 	printf("\n");
 // 	return (0);
 // }

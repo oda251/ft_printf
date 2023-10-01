@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   solve_format_num.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yoda <yoda@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 02:56:23 by yoda              #+#    #+#             */
-/*   Updated: 2023/10/01 07:46:51 by yoda             ###   ########.fr       */
+/*   Updated: 2023/10/01 18:37:28 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,7 @@ int	solve_ptr(unsigned long ptr, size_t *len, t_pflags *flags)
 	const char	*prefix = "0x";
 
 	if (!ptr && flags->dot && !flags->precision)
-	{
-		return (1);
-	}
-	else if (!ptr)
-	{
-		write(1, "0", 1);
-		(*len)++;
-		return (1);
-	}
+		str = ft_calloc(1, 1);
 	else
 		str = ft_ultoa_hex(ptr, LOWER);
 	if (!str)
@@ -43,7 +35,10 @@ int	solve_int(int n, size_t *len, t_pflags *flags)
 	char	*prefix;
 
 	prefix = "\0";
-	str = ft_itoa_sign_sep(n, &prefix);
+	if (n == 0 && flags->dot && !flags->precision)
+		str = ft_calloc(1, 1);
+	else
+		str = ft_itoa_sign_sep(n, &prefix);
 	if (!str)
 		return (-1);
 	if (flags->space && *prefix != '-')
@@ -58,7 +53,10 @@ int	solve_uint(unsigned int n, size_t *len, t_pflags *flags)
 {
 	char	*str;
 
-	str = ft_ultoa(n);
+	if (n == 0 && flags->dot && !flags->precision)
+		str = ft_calloc(1, 1);
+	else
+		str = ft_ultoa(n);
 	if (!str)
 		return (-1);
 	solve_with_flags(str, "", flags, len);
@@ -70,7 +68,9 @@ int	solve_hex_lowup(unsigned int n, int up_flag, size_t *len, t_pflags *flags)
 	char	*str;
 	char	*prefix;
 
-	if (up_flag)
+	if (n == 0 && flags->dot && !flags->precision)
+		str = ft_calloc(1, 1);
+	else if (up_flag)
 		str = ft_ultoa_hex(n, UPPER);
 	else
 		str = ft_ultoa_hex(n, LOWER);
